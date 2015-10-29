@@ -9,11 +9,39 @@
         <dex dex="C:\Users\foozi\Pictures\HDRI\FLIROneSDK-Android-1_0_2\FLIROneSDKBundle\FLIRONEExampleApplication\app\build\intermediates\pre-dexed\debug\classes-c6f6720b8a98062fb90110850df6ea11fdc5f9b5.jar" />
     </item>
     <item
+        jar="C:\Users\foozi\AndroidStudioProjects\Modified-Flir-Example\app\build\intermediates\exploded-aar\flironesdk\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="1c89f82573cb34767f3279a02cb7b7996bfc76fd">
+        <dex dex="C:\Users\foozi\AndroidStudioProjects\Modified-Flir-Example\app\build\intermediates\pre-dexed\debug\classes-2795fead8513a9de5067c7ceabf30db65b5b6090.jar" />
+    </item>
+    <item
+        jar="C:\Users\foozi\AndroidStudioProjects\Modified-Flir-Example\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.0.0\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="4e86306289ace4aa0cfec44a05ed2b410d36989d">
+        <dex dex="C:\Users\foozi\AndroidStudioProjects\Modified-Flir-Example\app\build\intermediates\pre-dexed\debug\classes-85e787e56eb6758e20d2c1cebea3d80a8e2742ba.jar" />
+    </item>
+    <item
         jar="C:\Users\foozi\Pictures\HDRI\FLIROneSDK-Android-1_0_2\FLIROneSDKBundle\FLIRONEExampleApplication\app\build\intermediates\exploded-aar\flironesdk\classes.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="1c89f82573cb34767f3279a02cb7b7996bfc76fd">
         <dex dex="C:\Users\foozi\Pictures\HDRI\FLIROneSDK-Android-1_0_2\FLIROneSDKBundle\FLIRONEExampleApplication\app\build\intermediates\pre-dexed\debug\classes-145851d121bbd4c1165156ed6b9390facdb85de8.jar" />
+    </item>
+    <item
+        jar="C:\Users\foozi\AndroidStudioProjects\Modified-Flir-Example\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\22.0.0\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="d84409890828e07d344a3b9b1da545dba9897b51">
+        <dex dex="C:\Users\foozi\AndroidStudioProjects\Modified-Flir-Example\app\build\intermediates\pre-dexed\debug\classes-b87c43a12d3373202d030c32c86827573639fc81.jar" />
+    </item>
+    <item
+        jar="C:\Users\foozi\AndroidStudioProjects\Modified-Flir-Example\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.0.0\libs\internal_impl-22.0.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="b5b92f469d515a13d778900f6d50c03d12f35504">
+        <dex dex="C:\Users\foozi\AndroidStudioProjects\Modified-Flir-Example\app\build\intermediates\pre-dexed\debug\internal_impl-22.0.0-17df6bb1683905aee5cc91b198345738c24aa7f7.jar" />
     </item>
     <item
         jar="C:\Users\foozi\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\22.0.0\support-annotations-22.0.0.jar"

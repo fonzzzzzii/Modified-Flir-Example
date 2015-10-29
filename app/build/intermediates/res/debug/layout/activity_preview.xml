@@ -11,8 +11,8 @@
     <!-- This FrameLayout insets its children based on system windows using
          android:fitsSystemWindows. -->
     <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:id="@+id/imageView"
         android:layout_gravity="center_horizontal|top"
         android:focusable="false"
@@ -200,4 +200,4 @@
 
     </FrameLayout>
 </FrameLayout>
-<!-- From: file:/C:/Users/foozi/Pictures/HDRI/FLIROneSDK-Android-1_0_2/FLIROneSDKBundle/FLIRONEExampleApplication/app/src/main/res/layout/activity_preview.xml -->
+<!-- From: file:/C:/Users/foozi/AndroidStudioProjects/Modified-Flir-Example/app/src/main/res/layout/activity_preview.xml -->

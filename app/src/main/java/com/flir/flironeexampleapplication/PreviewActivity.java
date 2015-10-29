@@ -92,6 +92,10 @@ public class PreviewActivity extends Activity implements Device.Delegate, FrameP
     private float yActualRes = 0;
     private float xTouch=0;
     private float yTouch = 0;
+    private short rotated = 1;
+
+    float x = 0;
+    float y = 0;
     // Device Delegate methods
 
     // Called during device discovery, when a device is connected
@@ -244,7 +248,7 @@ public class PreviewActivity extends Activity implements Device.Delegate, FrameP
     private void updateThermalImageView(final Bitmap frame){
 
         final TextView temperatureText = (TextView)findViewById(R.id.temperatureText);
-        final double centerTemperature = yDif;
+        final double centerTemperature = 10;
         Canvas c = new Canvas(frame);
         drawCrosshair(c, frame);
 
@@ -252,11 +256,11 @@ public class PreviewActivity extends Activity implements Device.Delegate, FrameP
             @Override
             public void run() {
                 thermalImageView.setImageBitmap(frame);
-                temperatureText.setText(centerTemperature + "C");
+                temperatureText.setText(centerTemperature- 273.15 + "C");
                 temperatureText.setVisibility(View.VISIBLE);
 
                 temperatureText.setX(xTouch - 20);
-                temperatureText.setY(yTouch + 100);
+                temperatureText.setY(yTouch + 65);
             }
         });
     }
@@ -273,8 +277,10 @@ public class PreviewActivity extends Activity implements Device.Delegate, FrameP
 
     private Bitmap thermalBitmap = null;
 
+
     // Frame Processor Delegate method, will be called each time a rendered frame is produced
     public void onFrameProcessed(final RenderedImage renderedImage){
+
         thermalBitmap = renderedImage.getBitmap();
         updateThermalImageView(thermalBitmap);
 
@@ -452,6 +458,8 @@ public class PreviewActivity extends Activity implements Device.Delegate, FrameP
         }else{
             thermalImageView.setRotation(0);
         }
+
+        rotated*=-1;
     }
     public void onChangeViewClicked(View v){
         if (frameProcessor == null){
@@ -570,7 +578,7 @@ public class PreviewActivity extends Activity implements Device.Delegate, FrameP
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Toast.makeText(getApplicationContext(), "created", Toast.LENGTH_LONG).show();
+        Toast .makeText(getApplicationContext(), "created", Toast.LENGTH_LONG).show();
         setContentView(R.layout.activity_preview);
 
         final View controlsView = findViewById(R.id.fullscreen_content_controls);
@@ -578,9 +586,9 @@ public class PreviewActivity extends Activity implements Device.Delegate, FrameP
         final View contentView = findViewById(R.id.fullscreen_content);
 
         mShadowPaint = new Paint(0);
-        mShadowPaint.setColor(Color.RED);
+        mShadowPaint.setColor(Color.WHITE);
         hollowPaint.setStyle(Paint.Style.STROKE);
-        hollowPaint.setColor(Color.BLACK);
+        hollowPaint.setColor(Color.WHITE);
         outlinePaint.setStyle(Paint.Style.STROKE);
         outlinePaint.setColor(Color.BLACK);
 
@@ -729,7 +737,7 @@ public class PreviewActivity extends Activity implements Device.Delegate, FrameP
                 mScaleDetector.onTouchEvent(event);
                 xTouch = event.getX();
                 yTouch = event.getY();
-                Toast.makeText(getApplicationContext(), "fullscreen_content x = " + xTouch + " y = " + yTouch, Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(), "fullscreen_content x = " + xTouch + " y = " + yTouch, Toast.LENGTH_LONG).show();
                 return true;
             }
         });
@@ -739,7 +747,7 @@ public class PreviewActivity extends Activity implements Device.Delegate, FrameP
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 xTouch = motionEvent.getX();
                 yTouch = motionEvent.getY();
-                Toast.makeText(getApplicationContext(), "imageView touch", Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(), "imageView touch", Toast.LENGTH_LONG).show();
                 return false;
             };
         });
@@ -811,33 +819,50 @@ public class PreviewActivity extends Activity implements Device.Delegate, FrameP
 
     public void drawCrosshair(Canvas c, Bitmap imageBitmap)
     {
-        float x =(xTouch/xRes)*imageBitmap.getWidth();
-        float y =(((yTouch/yActualRes))*imageBitmap.getHeight());
-        yDif = findViewById(R.id.imageView).getY();
-        yActualRes = yRes-yDif;
+        yDif = 2*findViewById(R.id.imageView).getY()+(yRes-findViewById(R.id.imageView).getHeight());
+        yActualRes = findViewById(R.id.imageView).getHeight()-findViewById(R.id.fullscreen_content_controls).getHeight()-findViewById(R.id.fullscreen_content_controls_top).getHeight();//yRes-yDif;
 
-        //Inside
-        c.drawCircle(x, y, 3, hollowPaint);
-        c.drawLine(x - 15, y, x - 3, y, mShadowPaint);
-        c.drawLine(x+3,y,x+15,y,mShadowPaint);
-        c.drawLine(x, y - 3, x, y - 15, mShadowPaint);
-        c.drawLine(x, y + 3, x, y + 15, mShadowPaint);
-        //Outside
-        c.drawCircle(x, y, 4, hollowPaint);
-        c.drawLine(x - 16, y + 1, x - 4, y + 1, outlinePaint);
-        c.drawLine(x - 16, y-1, x - 4, y-1, outlinePaint);
-        c.drawLine(x - 16, y+1, x - 16, y-1, outlinePaint);
+        int imageWidth = imageBitmap.getWidth();
+        int imageHeight = imageBitmap.getHeight();
 
-        c.drawLine(x+4,y+1,x+16,y+1,outlinePaint);
-        c.drawLine(x+4,y-1,x+16,y-1,outlinePaint);
-        c.drawLine(x + 16, y+1, x + 16, y-1, outlinePaint);
+        x =(xTouch/xRes)*imageWidth;
+        y =(((yTouch/yActualRes))*imageHeight);
 
-        c.drawLine(x+1,y-4,x+1,y-16,outlinePaint);
-        c.drawLine(x-1,y-4,x-1,y-16,outlinePaint);
-        c.drawLine(x-1,y-16,x+1,y-16,outlinePaint);
 
-        c.drawLine(x+1,y+4,x+1,y+16,outlinePaint);
-        c.drawLine(x - 1, y + 4, x - 1, y + 16, outlinePaint);
-        c.drawLine(x - 1, y + 16, x + 1, y + 16, outlinePaint);
+        if(rotated==1) {
+            //Inside
+            c.drawCircle(x, y, 3, hollowPaint);
+            c.drawLine(x + 3, y, x + 15, y, mShadowPaint);
+            c.drawLine(x - 3, y, x - 15, y, mShadowPaint);
+            c.drawLine(x, y - 3, x, y - 15, mShadowPaint);
+            c.drawLine(x, y + 3, x, y + 15, mShadowPaint);
+            /*//Outside
+            c.drawCircle(x, y, 4, hollowPaint);
+            c.drawLine(x - 16, y + 1, x - 4, y + 1, outlinePaint);
+            c.drawLine(x - 16, y - 1, x - 4, y - 1, outlinePaint);
+            c.drawLine(x - 16, y + 1, x - 16, y - 1, outlinePaint);
+
+            c.drawLine(x + 4, y + 1, x + 16, y + 1, outlinePaint);
+            c.drawLine(x + 4, y - 1, x + 16, y - 1, outlinePaint);
+            c.drawLine(x + 16, y + 1, x + 16, y - 1, outlinePaint);
+
+            c.drawLine(x + 1, y - 4, x + 1, y - 16, outlinePaint);
+            c.drawLine(x - 1, y - 4, x - 1, y - 16, outlinePaint);
+            c.drawLine(x - 1, y - 16, x + 1, y - 16, outlinePaint);
+
+            c.drawLine(x + 1, y + 4, x + 1, y + 16, outlinePaint);
+            c.drawLine(x - 1, y + 4, x - 1, y + 16, outlinePaint);
+            c.drawLine(x - 1, y + 16, x + 1, y + 16, outlinePaint);*/
+        }
+        else
+        {
+            //Inside
+            c.drawCircle(imageWidth-x, imageHeight-y, 3, hollowPaint);
+            c.drawLine(imageWidth - x - 3, imageHeight - y, imageWidth - x - 15, imageHeight - y, mShadowPaint);
+            c.drawLine(imageWidth-x + 3, imageHeight-y, imageWidth-x + 15, imageHeight-y, mShadowPaint);
+            c.drawLine(imageWidth-x, imageHeight-y + 3, imageWidth-x, imageHeight-y + 15, mShadowPaint);
+            c.drawLine(imageWidth-x, imageHeight-y - 3, imageWidth-x, imageHeight-y - 15, mShadowPaint);
+
+        }
     }
 }

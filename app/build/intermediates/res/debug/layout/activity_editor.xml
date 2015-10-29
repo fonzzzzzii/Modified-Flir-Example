@@ -12,4 +12,4 @@
         android:clickable="true"
         android:onClick="onImageClick"/>
 
-</LinearLayout><!-- From: file:/C:/Users/foozi/Pictures/HDRI/FLIROneSDK-Android-1_0_2/FLIROneSDKBundle/FLIRONEExampleApplication/app/src/main/res/layout/activity_editor.xml -->
+</LinearLayout><!-- From: file:/C:/Users/foozi/AndroidStudioProjects/Modified-Flir-Example/app/src/main/res/layout/activity_editor.xml -->

@@ -1,6 +1,6 @@
-C:\Users\foozi\Pictures\HDRI\FLIROneSDK-Android-1_0_2\FLIROneSDKBundle\FLIRONEExampleApplication\app\build\intermediates\classes\debug
-C:\Users\foozi\Pictures\HDRI\FLIROneSDK-Android-1_0_2\FLIROneSDKBundle\FLIRONEExampleApplication\app\build\intermediates\pre-dexed\debug\support-annotations-22.0.0-5bff0b69214482b180d95657cca1e17c2692d399.jar
-C:\Users\foozi\Pictures\HDRI\FLIROneSDK-Android-1_0_2\FLIROneSDKBundle\FLIRONEExampleApplication\app\build\intermediates\pre-dexed\debug\classes-145851d121bbd4c1165156ed6b9390facdb85de8.jar
-C:\Users\foozi\Pictures\HDRI\FLIROneSDK-Android-1_0_2\FLIROneSDKBundle\FLIRONEExampleApplication\app\build\intermediates\pre-dexed\debug\internal_impl-22.0.0-d834ca32e9d367aa84ea0e1f30f617fac2547149.jar
-C:\Users\foozi\Pictures\HDRI\FLIROneSDK-Android-1_0_2\FLIROneSDKBundle\FLIRONEExampleApplication\app\build\intermediates\pre-dexed\debug\classes-64d63a8c8c91485c22c4aba7776bd31a1c79f58e.jar
-C:\Users\foozi\Pictures\HDRI\FLIROneSDK-Android-1_0_2\FLIROneSDKBundle\FLIRONEExampleApplication\app\build\intermediates\pre-dexed\debug\classes-c6f6720b8a98062fb90110850df6ea11fdc5f9b5.jar
+C:\Users\foozi\AndroidStudioProjects\Modified-Flir-Example\app\build\intermediates\classes\debug
+C:\Users\foozi\AndroidStudioProjects\Modified-Flir-Example\app\build\intermediates\pre-dexed\debug\support-annotations-22.0.0-5bff0b69214482b180d95657cca1e17c2692d399.jar
+C:\Users\foozi\AndroidStudioProjects\Modified-Flir-Example\app\build\intermediates\pre-dexed\debug\classes-2795fead8513a9de5067c7ceabf30db65b5b6090.jar
+C:\Users\foozi\AndroidStudioProjects\Modified-Flir-Example\app\build\intermediates\pre-dexed\debug\internal_impl-22.0.0-17df6bb1683905aee5cc91b198345738c24aa7f7.jar
+C:\Users\foozi\AndroidStudioProjects\Modified-Flir-Example\app\build\intermediates\pre-dexed\debug\classes-b87c43a12d3373202d030c32c86827573639fc81.jar
+C:\Users\foozi\AndroidStudioProjects\Modified-Flir-Example\app\build\intermediates\pre-dexed\debug\classes-85e787e56eb6758e20d2c1cebea3d80a8e2742ba.jar
