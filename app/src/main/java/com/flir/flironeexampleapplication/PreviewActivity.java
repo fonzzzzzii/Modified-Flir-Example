@@ -105,7 +105,7 @@ public class PreviewActivity extends Activity implements Device.Delegate, FrameP
     // Finally we create a frame processor for rendering frames
     private int frameCount = 0;
     public void onDeviceConnected(Device device){
-        Log.i("ExampleApp", "Device connected!");
+        //Log.i("ExampleApp", "Device connected!");
 
         flirOneDevice = device;
         flirOneDevice.setPowerUpdateDelegate(this);
@@ -138,7 +138,7 @@ public class PreviewActivity extends Activity implements Device.Delegate, FrameP
      * Indicate to the user that the device has disconnected
      */
     public void onDeviceDisconnected(Device device){
-        Log.i("ExampleApp", "Device disconnected!");
+        //Log.i("ExampleApp", "Device disconnected!");
 
         final ToggleButton chargeCableButton = (ToggleButton)findViewById(R.id.chargeCableToggle);
         final TextView levelTextView = (TextView)findViewById(R.id.batteryLevelTextView);
@@ -167,7 +167,7 @@ public class PreviewActivity extends Activity implements Device.Delegate, FrameP
      * @param tuningState
      */
     public void onTuningStateChanged(Device.TuningState tuningState){
-        Log.i("ExampleApp", "Tuning state changed changed!");
+        //Log.i("ExampleApp", "Tuning state changed changed!");
 
         currentTuningState = tuningState;
         if (tuningState == Device.TuningState.InProgress){
@@ -200,7 +200,7 @@ public class PreviewActivity extends Activity implements Device.Delegate, FrameP
     private ColorFilter originalChargingIndicatorColor = null;
     @Override
     public void onBatteryChargingStateReceived(final Device.BatteryChargingState batteryChargingState) {
-        Log.i("ExampleApp", "Battery charging state received!");
+        //Log.i("ExampleApp", "Battery charging state received!");
 
         runOnUiThread(new Runnable() {
             @Override
@@ -232,7 +232,7 @@ public class PreviewActivity extends Activity implements Device.Delegate, FrameP
     }
     @Override
     public void onBatteryPercentageReceived(final byte percentage){
-        Log.i("ExampleApp", "Battery percentage received!");
+        //Log.i("ExampleApp", "Battery percentage received!");
 
         final TextView levelTextView = (TextView)findViewById(R.id.batteryLevelTextView);
         runOnUiThread(new Runnable() {
@@ -248,35 +248,54 @@ public class PreviewActivity extends Activity implements Device.Delegate, FrameP
     private void updateThermalImageView(final Bitmap frame){
 
         final TextView temperatureText = (TextView)findViewById(R.id.temperatureText);
-        final double centerTemperature = 10;
+        final double centerTemperature = ((double)rawTemperature/ 100) - 273.15;;
         Canvas c = new Canvas(frame);
         drawCrosshair(c, frame);
 
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                thermalImageView.setImageBitmap(frame);
-                temperatureText.setText(centerTemperature- 273.15 + "C");
-                temperatureText.setVisibility(View.VISIBLE);
 
-                temperatureText.setX(xTouch - 20);
-                temperatureText.setY(yTouch + 65);
+                if(gettingTemperature==false) {
+                    thermalImageView.setImageBitmap(frame);
+
+                    temperatureText.setText(centerTemperature + "C");
+                    temperatureText.setVisibility(View.VISIBLE);
+
+                    temperatureText.setX(xTouch - 20);
+                    temperatureText.setY(yTouch + 65);
+                }
             }
         });
     }
-
+    boolean gettingTemperature = false;
     // StreamDelegate method
+    /*0 ThermalLinearFlux14BitImage
+     1 ThermalRGBA8888Image
+     2 BlendedMSXRGBA8888Image
+     3 VisualJPEGImage
+     4 VisualYCbCr888Image
+     5 ThermalRadiometricKelvinImage*/
     public void onFrameReceived(Frame frame){
-        Log.v("ExampleApp", "Frame received!");
+        //Log.v("ExampleApp", "Frame received!");
 
         if (currentTuningState != Device.TuningState.InProgress && frameCount%2 == 0){
+            RenderedImage.ImageType imageType = RenderedImage.ImageType.values()[2];
+           // for(int i=0;i<RenderedImage.ImageType.values().length;i++)
+            //    Log.w("app",i+ " " + RenderedImage.ImageType.values()[i]);
+            //Toast .makeText(getApplicationContext(), RenderedImage.ImageType.values().toString(), Toast.LENGTH_LONG).show();
+            frameProcessor.setImageTypes(EnumSet.of(imageType));
             frameProcessor.processFrame(frame);
+            gettingTemperature = true;
+            frameProcessor.setImageTypes(EnumSet.of(RenderedImage.ImageType.values()[5]));
+            frameProcessor.processFrame(frame);
+            gettingTemperature = false;
         }
         frameCount++;
     }
 
     private Bitmap thermalBitmap = null;
-
+    short rawTemperature = 0;
 
     // Frame Processor Delegate method, will be called each time a rendered frame is produced
     public void onFrameProcessed(final RenderedImage renderedImage){
@@ -284,7 +303,18 @@ public class PreviewActivity extends Activity implements Device.Delegate, FrameP
         thermalBitmap = renderedImage.getBitmap();
         updateThermalImageView(thermalBitmap);
 
-
+        //focusedTemperature = renderedImage.pixelData()[(int)x+(int)y];
+        if(gettingTemperature) {
+            double averageTemp = 0;
+            short[] shortPixels = new short[renderedImage.pixelData().length / 2];
+            //ByteBuffer.wrap(renderedImage.pixelData()).asShortBuffer().get(shortPixels);//.order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().get(shortPixels);
+            ByteBuffer.wrap(renderedImage.pixelData()).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer().get(shortPixels);
+            for (int i = 0; i < shortPixels.length; i++) {
+                averageTemp += (((int) shortPixels[i]) - averageTemp) / ((double) i + 1);
+            }
+            final double averageC = (averageTemp / 100) - 273.15;
+            rawTemperature = shortPixels[(int) x + (int) y];
+        }
         /*
         Capture this image if requested.
         */
@@ -306,8 +336,8 @@ public class PreviewActivity extends Activity implements Device.Delegate, FrameP
                                 new MediaScannerConnection.OnScanCompletedListener() {
                                     @Override
                                     public void onScanCompleted(String path, Uri uri) {
-                                        Log.i("ExternalStorage", "Scanned " + path + ":");
-                                        Log.i("ExternalStorage", "-> uri=" + uri);
+                                       // Log.i("ExternalStorage", "Scanned " + path + ":");
+                                       // Log.i("ExternalStorage", "-> uri=" + uri);
                                     }
 
                                 });
@@ -360,12 +390,12 @@ public class PreviewActivity extends Activity implements Device.Delegate, FrameP
 
 
                         } catch (IOException ex) {
-                            Log.e("STREAM", "Error sending frame: " + ex.toString());
+                            //Log.e("STREAM", "Error sending frame: " + ex.toString());
                         }
                     }
                 }).start();
             } catch (Exception ex){
-                   Log.e("STREAM", "Error creating PNG: "+ex.getMessage());
+                   //Log.e("STREAM", "Error creating PNG: "+ex.getMessage());
 
             }
 
@@ -436,7 +466,7 @@ public class PreviewActivity extends Activity implements Device.Delegate, FrameP
                 chargeCableIsConnected = true;
             } catch(Exception ex) {
                 flirOneDevice = null;
-                Log.w("FLIROneExampleApp", "IO EXCEPTION");
+                //Log.w("FLIROneExampleApp", "IO EXCEPTION");
                 ex.printStackTrace();
             }
         }else if(flirOneDevice instanceof SimulatedDevice) {
@@ -537,7 +567,7 @@ public class PreviewActivity extends Activity implements Device.Delegate, FrameP
                                 });
 
                             }catch (Exception ex){
-                                Log.e("CONNECT",ex.getMessage());
+                                //Log.e("CONNECT",ex.getMessage());
                             }
                         }
                     }).start();
@@ -725,7 +755,7 @@ public class PreviewActivity extends Activity implements Device.Delegate, FrameP
             }
             @Override
             public boolean onScale(ScaleGestureDetector detector) {
-                Log.d("ZOOM", "zoom ongoing, scale: " + detector.getScaleFactor());
+               // Log.d("ZOOM", "zoom ongoing, scale: " + detector.getScaleFactor());
                 frameProcessor.setMSXDistance(detector.getScaleFactor());
                 return false;
             }
@@ -760,7 +790,7 @@ public class PreviewActivity extends Activity implements Device.Delegate, FrameP
         try {
             Device.startDiscovery(this, this);
         } catch (IllegalStateException e) {
-            Log.e("PreviewActivity", "Somehow we've started discovery twice");
+            //Log.e("PreviewActivity", "Somehow we've started discovery twice");
             e.printStackTrace();
         }
         super.onRestart();
@@ -769,7 +799,7 @@ public class PreviewActivity extends Activity implements Device.Delegate, FrameP
     @Override
     public void onStop() {
         // We must unregister our usb receiver, otherwise we will steal events from other apps
-        Log.e("PreviewActivity", "onStop, stopping discovery!");
+        //Log.e("PreviewActivity", "onStop, stopping discovery!");
         Device.stopDiscovery();
         super.onStop();
     }
